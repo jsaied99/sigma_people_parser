@@ -1,2 +1,7 @@
 **/.idea/**
 out/
+.antlr/
+python3_parser*.java
+generated/*.java
+generated/*.interp
+generated/*.tokens  
