@@ -1,8 +1,9 @@
 import java.util.Scanner;
 import java.nio.file.*;
 import java.io.*;
+import org.antlr.runtime.*;
 
-public class Main {
+public class main {
     public static void main(String[] args) throws IOException{
         System.out.println("Enter the name of the python file to parse: ");
         Scanner scan = new Scanner(System.in);
