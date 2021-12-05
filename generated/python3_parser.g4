@@ -8,10 +8,11 @@ variableAssignment: variableName '=' variableType;
 
 variableType:
 	string
-	| NUMBER
+	// | number
+	| number
 	| bool
-	| NULL
-	| FLOAT
+	| nullvalue
+	| floatvalue
 	| set
 	| list
 	| dict;
@@ -27,17 +28,32 @@ STRING_LITERAL:
 	| '\\'
 	| ';';
 
-NUMBER: DECIMAL_INTEGER;
+// number: DECIMAL_INTEGER;
+fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
+
+fragment DIGIT: ('0' ..'9');
+
+// number: HEX_NUMBER | INTEGER_NUMBER;
+number: NUMBER;
+
+HEX_NUMBER: '0' 'x' HEX_DIGIT+;
+
+INTEGER_NUMBER: [0-9]+;
+
+
+testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
 
 DECIMAL_INTEGER: NON_ZERO_DIGIT DIGIT* | '0'+;
 
 NON_ZERO_DIGIT: [1-9];
-DIGIT: [0-9];
+// DIGIT: [0-9];
 
 bool: 'True' | 'False';
-NULL: 'None';
+nullvalue: 'None';
 
-FLOAT: [0-9]+ '.' [0-9]+;
+floatvalue: DECIMAL_INTEGER+ '.' DECIMAL_INTEGER+;
+
+
 
 set: '(' variableType (',' variableType)* ')' | '(' ')';
 list: '[' variableType (',' variableType)* ']' | '[' ']';
@@ -80,3 +96,14 @@ conditionalStatement:
 	| 'not';
 
 WS: [ \t\n\r]+ -> skip;
+
+
+fragment DIGIT2: '0' ..'9';
+
+fragment INTEGER: DIGIT2+;
+
+fragment DOT : '.';
+
+// NUMBER: INTEGER (DOT INTEGER)?;
+NUMBER: INTEGER (DOT INTEGER)?;
+
