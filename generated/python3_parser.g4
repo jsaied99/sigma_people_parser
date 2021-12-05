@@ -83,7 +83,19 @@ condition: IDENTIFIER conditionalStatement IDENTIFIER;
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
 arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
-assignmentOperators: ('+' | '-' | '*' | '/' | '^' | '%')? '=';
+
+// Jaden was here
+// S -> NA=V
+// A -> empty | + | - | * | / | % | // | ** | & | | | ^ | >> | <<
+// O -> A | ~
+// N -> var_name
+// V -> value | E | N
+// E -> VOV
+assignmentOperators: variableName assignmentPreOperand '=' assigned;
+assignmentPreOperand: ;
+assigned: variableName | variableType | arithmeticOperation;
+
+
 conditionalStatement:
 	'<'
 	| '<='
