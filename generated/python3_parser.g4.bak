@@ -8,11 +8,10 @@ variableAssignment: variableName '=' variableType;
 
 variableType:
 	string
-	// | number
-	| number
+	| NUMBER
 	| bool
-	| nullvalue
-	| floatvalue
+	| NULL
+	| FLOAT
 	| set
 	| list
 	| dict;
@@ -28,32 +27,17 @@ STRING_LITERAL:
 	| '\\'
 	| ';';
 
-// number: DECIMAL_INTEGER;
-fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
-
-fragment DIGIT: ('0' ..'9');
-
-// number: HEX_NUMBER | INTEGER_NUMBER;
-number: NUMBER;
-
-HEX_NUMBER: '0' 'x' HEX_DIGIT+;
-
-INTEGER_NUMBER: [0-9]+;
-
-
-testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
+NUMBER: DECIMAL_INTEGER;
 
 DECIMAL_INTEGER: NON_ZERO_DIGIT DIGIT* | '0'+;
 
 NON_ZERO_DIGIT: [1-9];
-// DIGIT: [0-9];
+DIGIT: [0-9];
 
 bool: 'True' | 'False';
-nullvalue: 'None';
+NULL: 'None';
 
-floatvalue: DECIMAL_INTEGER+ '.' DECIMAL_INTEGER+;
-
-
+FLOAT: [0-9]+ '.' [0-9]+;
 
 set: '(' variableType (',' variableType)* ')' | '(' ')';
 list: '[' variableType (',' variableType)* ']' | '[' ']';
@@ -83,19 +67,7 @@ condition: IDENTIFIER conditionalStatement IDENTIFIER;
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
 arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
-
-// Jaden was here
-// S -> NA=V
-// A -> empty | + | - | * | / | % | // | ** | & | | | ^ | >> | <<
-// O -> A | ~
-// N -> var_name
-// V -> value | E | N
-// E -> VOV
-assignmentOperators: variableName assignmentPreOperand '=' assigned;
-assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' | '';
-assigned: variableName | variableType | arithmeticOperation;
-arithmeticOperation: assigned arithmeticOperands assigned;
-
+assignmentOperators: ('+' | '-' | '*' | '/' | '^' | '%')? '=';
 conditionalStatement:
 	'<'
 	| '<='
@@ -108,14 +80,3 @@ conditionalStatement:
 	| 'not';
 
 WS: [ \t\n\r]+ -> skip;
-
-
-fragment DIGIT2: '0' ..'9';
-
-fragment INTEGER: DIGIT2+;
-
-fragment DOT : '.';
-
-// NUMBER: INTEGER (DOT INTEGER)?;
-NUMBER: INTEGER (DOT INTEGER)?;
-
