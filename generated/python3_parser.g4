@@ -34,7 +34,7 @@ fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
 fragment DIGIT: ('0' ..'9');
 
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: NUMBER;
+number: INTEGER_NUMBER;
 
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
 
@@ -61,9 +61,7 @@ list: '[' variableType (',' variableType)* ']' | '[' ']';
 dict: '{' ( keyValuePair (',' keyValuePair)*)? '}';
 keyValuePair: string ':' (variableType | dict);
 
-NUMBERS: [0-9]+;
-
-operation: NUMBERS+ arithmeticOperands NUMBERS+ NEWLINE;
+operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 NEWLINE: [\r\n]+;
 // primitive : string | bool ;
 ifBlock:
@@ -92,9 +90,13 @@ arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 // V -> value | E | N
 // E -> VOV
 assignmentOperators: variableName assignmentPreOperand '=' assigned;
-assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' | '';
+assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' | ' ';
 assigned: variableName | variableType | arithmeticOperation;
-arithmeticOperation: assigned arithmeticOperands assigned;
+arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
+    | floatvalue
+    | number
+    | '(' arithmeticOperation ')'
+    ;
 
 conditionalStatement:
 	'<'
@@ -119,14 +121,14 @@ operator: "==" | "!=" | "<" | "<=" | ">" | ">=" | "+"  | "-"  | "*" | "/";
 */
 
 expression: equality;
-equality: comparison(("!="|"==") comparison)*;
-comparison: term((">"|">="|"<"|"=<") term)*;
-term: factor(("-"|"+") factor)*;
-factor: unary(("/"|"-") unary)*;
-unary: unary("!"|"-") unary
+equality: comparison(('!='|'==') comparison)*;
+comparison: term(('>'|'>='|'<'|'=<') term)*;
+term: factor(('-'|'+') factor)*;
+factor: unary(('/'|'-') unary)*;
+unary: unary('!'|'-') unary
     | primary;
-primary: NUMBER | STRING | "true" | "false" | "nil"
-    | "(" expression ")";
+primary: NUMBER | STRING | 'true' | 'false' | 'nil'
+    | '(" expression ")';
 	
 WS: [ \t\n\r]+ -> skip;
 
