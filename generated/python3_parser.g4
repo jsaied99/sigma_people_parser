@@ -29,7 +29,8 @@ fragment STRING_LITERAL:
 	| '&'
 	| '/'
 	| '\\'
-	| ';';
+	| ';'
+	| ' ';
 
 // number: DECIMAL_INTEGER;
 fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
