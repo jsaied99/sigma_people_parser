@@ -7,9 +7,9 @@ variableName: IDENTIFIER;
 variableAssignment: variableName '=' variableType;
 
 variableType:
-	string
+    number
+	| string
 	// | number
-	| number
 	| bool
 	| nullvalue
 	| floatvalue
@@ -18,9 +18,9 @@ variableType:
 	| dict;
 
 
-
-string: '"' STRING_LITERAL* '"';
-STRING_LITERAL:
+string : STRING ;
+STRING: '"' STRING_LITERAL* '"';
+fragment STRING_LITERAL:
 	'a' ..'z'
 	| 'A' ..'Z'
 	| '0' ..'9'
@@ -37,7 +37,7 @@ fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
 fragment DIGIT: ('0' ..'9');
 
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: INTEGER_NUMBER | INTEGER;
+number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT;
 
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
 
@@ -137,6 +137,8 @@ primary: NUMBER | string | 'true' | 'false' | 'nil'
 	
 WS: [ \t\n\r]+ -> skip;
 
+fragment D : [0-9] ;
+INT : D+ ;
 
 fragment DIGIT2: '0' ..'9';
 
