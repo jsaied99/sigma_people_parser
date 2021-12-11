@@ -1,6 +1,6 @@
 grammar python3_parser;
 
-IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]+;
+IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 
 variableName: IDENTIFIER;
 
@@ -16,6 +16,9 @@ variableType:
 	| set
 	| list
 	| dict;
+
+
+
 string: '"' STRING_LITERAL* '"';
 STRING_LITERAL:
 	'a' ..'z'
@@ -34,7 +37,7 @@ fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
 fragment DIGIT: ('0' ..'9');
 
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: INTEGER_NUMBER;
+number: INTEGER_NUMBER | INTEGER;
 
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
 
@@ -82,6 +85,7 @@ blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
 arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 
+
 // Jaden was here
 // S -> NA=V
 // A -> empty | + | - | * | / | % | // | ** | & | | | ^ | >> | <<
@@ -97,6 +101,7 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | number
     | '(' arithmeticOperation ')'
     ;
+
 
 conditionalStatement:
 	'<'
@@ -128,7 +133,7 @@ factor: unary(('/'|'-') unary)*;
 unary: unary('!'|'-') unary
     | primary;
 primary: NUMBER | string | 'true' | 'false' | 'nil'
-    | '(" expression ")';
+    | '(' expression ')';
 	
 WS: [ \t\n\r]+ -> skip;
 

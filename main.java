@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.nio.file.*;
 import java.io.*;
-import org.antlr.runtime.*;
+import org.antlr.v4.runtime;
 
 public class main {
     public static void main(String[] args) throws IOException{
