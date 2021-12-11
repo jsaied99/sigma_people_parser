@@ -54,8 +54,8 @@ NON_ZERO_DIGIT: [1-9];
 bool: 'True' | 'False';
 nullvalue: 'None';
 
-floatvalue: DECIMAL_INTEGER+ '.' DECIMAL_INTEGER+;
-
+//floatvalue: DECIMAL_INTEGER+ '.' DECIMAL_INTEGER+;
+floatvalue: NUMBER;
 
 
 set: '(' variableType (',' variableType)* ')' | '(' ')';
