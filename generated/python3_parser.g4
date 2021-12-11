@@ -127,7 +127,7 @@ term: factor(('-'|'+') factor)*;
 factor: unary(('/'|'-') unary)*;
 unary: unary('!'|'-') unary
     | primary;
-primary: NUMBER | STRING | 'true' | 'false' | 'nil'
+primary: NUMBER | string | 'true' | 'false' | 'nil'
     | '(" expression ")';
 	
 WS: [ \t\n\r]+ -> skip;
@@ -141,3 +141,12 @@ fragment DOT : '.';
 
 // NUMBER: INTEGER (DOT INTEGER)?;
 NUMBER: INTEGER (DOT INTEGER)?;
+
+// making var to handle case of multiple condition
+condition_handler: condition 'AND' condition_handler | condition;
+
+// while loop
+while_statement: 'while' condition_handler':';
+
+// for loop
+for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
