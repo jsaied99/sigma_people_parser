@@ -4,7 +4,7 @@ IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 
 variableName: IDENTIFIER;
 
-variableAssignment: variableName ' = ' variableType;
+variableAssignment: variableName '=' variableType;
 
 variableType:
     number
@@ -145,6 +145,8 @@ primary: NUMBER | string | 'true' | 'false' | 'nil'
 //;
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 
+
+WS: [ \t\n\r]+ -> skip;
 fragment D : [0-9] ;
 INT : D+ ;
 
