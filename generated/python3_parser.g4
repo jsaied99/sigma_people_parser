@@ -4,7 +4,7 @@ IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 
 variableName: IDENTIFIER;
 
-variableAssignment: variableName '=' variableType;
+variableAssignment: variableName ' = ' variableType;
 
 variableType:
     number
@@ -55,8 +55,8 @@ NON_ZERO_DIGIT: [1-9];
 bool: 'True' | 'False';
 nullvalue: 'None';
 
-//floatvalue: DECIMAL_INTEGER+ '.' DECIMAL_INTEGER+;
 floatvalue: NUMBER;
+
 
 
 set: '(' variableType (',' variableType)* ')' | '(' ')';
@@ -80,7 +80,7 @@ SPACES: [ \t]+;
 
 // whileBlock : 'while' condition ':' blockCode ;
 
-condition: IDENTIFIER conditionalStatement IDENTIFIER;
+condition: (IDENTIFIER | variableType) ' ' conditionalStatement ' ' (IDENTIFIER | variableType);
 
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
@@ -135,8 +135,15 @@ unary: unary('!'|'-') unary
     | primary;
 primary: NUMBER | string | 'true' | 'false' | 'nil'
     | '(' expression ')';
-	
-WS: [ \t\n\r]+ -> skip;
+
+//WS
+//    : [ \t\r\n]+ -> channel(HIDDEN)
+//;
+//
+//COMMENT
+//    : '#' .*? -> skip
+//;
+COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 
 fragment D : [0-9] ;
 INT : D+ ;
