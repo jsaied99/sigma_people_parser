@@ -121,16 +121,11 @@ fragment STRING_LITERAL:
 	| '\\'
 	| ';'
 	| ' ';
-
-// number: DECIMAL_INTEGER;
 fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
-
 fragment DIGIT: ('0' ..'9');
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
-
 INTEGER_NUMBER: [0-9]+;
 DECIMAL_INTEGER: NON_ZERO_DIGIT DIGIT* | '0'+;
-
 NON_ZERO_DIGIT: [1-9];
 NEWLINE: [\r\n]+;
 EQUAL: '==';
