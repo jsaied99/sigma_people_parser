@@ -151,4 +151,5 @@ fragment DIGIT2: '0' ..'9';
 fragment INTEGER: DIGIT2+;
 fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
+SET: '=';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
