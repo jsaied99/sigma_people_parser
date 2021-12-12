@@ -104,27 +104,29 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | '(' arithmeticOperation ')'
     ;
 
-/*
-expression: literal
-	| unary
-	| binary
-	| grouping;
-literal: NUMBER | STRING | 'true' | 'false' | 'nil';
-grouping: '('expression')';
-unary: ( '-' | '!' ) expression;
-binary: expression operator expression;
-operator: '==' | '!=' | '<' | '<=' | '>' | '>=' | '+'  | '-'  | '*' | '/';
-*/
 
 conditionalStatement: equality;
 equality: comparison(('!='|'==') comparison)*;
 comparison: term(('>'|'>='|'<'|'=<') term)*;
 term: factor(('-'|'+') factor)*;
-factor: unary(('/'|'-') unary)*;
+factor: unary(('/'|'*') unary)*;
 unary: unary('!'|'-') unary
     | primary;
 primary: variableType | variableName | string | 'true' | 'false' | 'nil'
     | '(' conditionalStatement ')';
+
+EQUAL: '==';
+NOT_EQUAL: '!=';
+EQUAL_GREATER: '>=';
+GREATER_THAN: '>';
+EQUAL_LESS: '<=';
+LESS_THAN: '<';
+NOT: '!';
+DIVIDE: '/';
+MULTIPLY: '*';
+PLUS: '+';
+MINUS: '-';
+
 
 //WS
 //    : [ \t\r\n]+ -> channel(HIDDEN)
