@@ -60,14 +60,14 @@ arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 // N -> var_name
 // V -> value | E | N
 // E -> VOV
-assignmentOperators: variableName ('=' | assignmentPreOperand '=') assigned;
-assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' ;
+assignmentOperators: variableName (SET | assignmentPreOperand SET) assigned;
+assignmentPreOperand: arithmeticOperands | PRESETOPERAND;
 assigned: variableType | arithmeticOperation;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | floatvalue
     | number
     | variableName
-    | '(' arithmeticOperation ')'
+    | LPAREN arithmeticOperation RPAREN
     | variableName
     ;
 
@@ -121,6 +121,7 @@ fragment STRING_LITERAL:
 	| '\\'
 	| ';'
 	| ' ';
+PRESETOPERAND: '//' | '**' | '&' | '|' | '<<' | '>>';
 fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
 fragment DIGIT: ('0' ..'9');
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
