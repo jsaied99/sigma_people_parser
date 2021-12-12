@@ -94,7 +94,7 @@ arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 // N -> var_name
 // V -> value | E | N
 // E -> VOV
-assignmentOperators: variableName assignmentPreOperand '=' assigned;
+assignmentOperators: variableName ('=' | assignmentPreOperand '=') assigned;
 assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' ;
 assigned: variableName | variableType | arithmeticOperation;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
