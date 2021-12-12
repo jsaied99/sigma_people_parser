@@ -69,8 +69,8 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 NEWLINE: [\r\n]+;
 // primitive : string | bool ;
 ifBlock:
-	'if ' condition ':' blockCode
-	| 'if ' condition ':' blockCode 'else:' blockCode;
+	'if' condition ':' blockCode
+	| 'if' condition ':' blockCode 'else:' blockCode;
 
 
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
