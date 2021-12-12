@@ -24,10 +24,10 @@ floatvalue: NUMBER;
 
 
 
-set: '(' variableType (',' variableType)* ')' | '(' ')';
-list: '[' variableType (',' variableType)* ']' | '[' ']';
+set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
+list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
 
-dict: '{' ( keyValuePair (',' keyValuePair)*)? '}';
+dict: BRACKET ( keyValuePair (',' keyValuePair)*)? BRACKET;
 keyValuePair: string ':' (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
@@ -108,7 +108,7 @@ for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
 
 
 
-
+BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
 fragment STRING_LITERAL:
 	'a' ..'z'
