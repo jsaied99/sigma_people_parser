@@ -72,15 +72,15 @@ ifBlock:
 	'if ' condition ':' blockCode
 	| 'if ' condition ':' blockCode 'else:' blockCode;
 
-INDENT: SPACES+;
+
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
-SPACES: [ \t]+;
+
 // ifElseBlock : 'if' condition ':' blockCode 'else:' blockCode ;
 
 // whileBlock : 'while' condition ':' blockCode ;
 
-condition: (IDENTIFIER | variableType) ' ' conditionalStatement ' ' (IDENTIFIER | variableType);
+condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
@@ -95,7 +95,7 @@ arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 // V -> value | E | N
 // E -> VOV
 assignmentOperators: variableName assignmentPreOperand '=' assigned;
-assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' | ' ';
+assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' ;
 assigned: variableName | variableType | arithmeticOperation;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | floatvalue
