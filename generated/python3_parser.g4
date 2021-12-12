@@ -80,7 +80,7 @@ term: factor((MINUS|PLUS) factor)*;
 factor: unary((DIVIDE|MULTIPLY) unary)*;
 unary: unary(NOT|MINUS) unary
     | primary;
-primary: variableType | variableName | string | 'true' | 'false' | 'nil'
+primary: variableType | variableName | string | bool | nullvalue
     | '(' conditionalStatement ')';
 
 
