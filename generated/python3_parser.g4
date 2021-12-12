@@ -3,9 +3,7 @@ grammar python3_parser;
 
 
 variableName: IDENTIFIER;
-
 variableAssignment: variableName '=' variableType;
-
 variableType:
     number
 	| string
@@ -16,24 +14,12 @@ variableType:
 	| set
 	| list
 	| dict;
-
-
 string : STRING ;
-
-
 // number: HEX_NUMBER | INTEGER_NUMBER;
 number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | '-'INTEGER_NUMBER;
-
-
-
 testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
-
-
-// DIGIT: [0-9];
-
 bool: 'True' | 'False';
 nullvalue: 'None';
-
 floatvalue: NUMBER;
 
 
