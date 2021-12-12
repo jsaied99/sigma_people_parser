@@ -1,7 +1,5 @@
 grammar python3_parser;
 
-
-
 variableName: IDENTIFIER;
 variableAssignment: variableName SET variableType;
 variableType:
@@ -16,13 +14,11 @@ variableType:
 	| dict;
 string : STRING ;
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | '-'INTEGER_NUMBER;
+number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | MINUS INTEGER_NUMBER;
 testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
 bool: 'True' | 'False';
 nullvalue: 'None';
 floatvalue: NUMBER;
-
-
 
 set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
 list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
@@ -49,9 +45,7 @@ condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variab
 
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
-arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
-
-
+arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
 // Jaden was here
 // S -> NA=V
@@ -68,10 +62,7 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | number
     | variableName
     | LPAREN arithmeticOperation RPAREN
-    | variableName
     ;
-
-
 
 conditionalStatement: equality;
 equality: comparison((NOT_EQUAL|EQUAL) comparison)*;
@@ -82,7 +73,6 @@ unary: unary(NOT|MINUS) unary
     | primary;
 primary: variableType | variableName | string | bool | nullvalue
     | '(' conditionalStatement ')';
-
 
 
 //WS
@@ -105,8 +95,6 @@ while_statement: 'while' condition_handler':';
 
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
-
-
 
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
