@@ -124,7 +124,7 @@ term: factor(('-'|'+') factor)*;
 factor: unary(('/'|'-') unary)*;
 unary: unary('!'|'-') unary
     | primary;
-primary: NUMBER | string | 'true' | 'false' | 'nil'
+primary: variableType | variableName | string | 'true' | 'false' | 'nil'
     | '(' conditionalStatement ')';
 
 //WS
