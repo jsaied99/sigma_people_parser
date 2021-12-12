@@ -38,7 +38,7 @@ fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
 fragment DIGIT: ('0' ..'9');
 
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT;
+number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | '-'INTEGER_NUMBER;
 
 HEX_NUMBER: '0' 'x' HEX_DIGIT+;
 
@@ -100,6 +100,7 @@ assigned: variableName | variableType | arithmeticOperation;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | floatvalue
     | number
+    | variableName
     | '(' arithmeticOperation ')'
     ;
 
