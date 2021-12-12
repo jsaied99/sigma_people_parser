@@ -103,30 +103,19 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | '(' arithmeticOperation ')'
     ;
 
-
-conditionalStatement:
-	'<'
-	| '<='
-	| '>'
-	| '>='
-	| '=='
-	| '!='
-	| 'and'
-	| 'or'
-	| 'not';
-
-/*expression: literal
+/*
+expression: literal
 	| unary
 	| binary
 	| grouping;
-literal: NUMBER | STRING | "true" | "false" | "nil";
-grouping: "(" expression")";
-unary: ( "-" | "!" ) expression;
+literal: NUMBER | STRING | 'true' | 'false' | 'nil';
+grouping: '('expression')';
+unary: ( '-' | '!' ) expression;
 binary: expression operator expression;
-operator: "==" | "!=" | "<" | "<=" | ">" | ">=" | "+"  | "-"  | "*" | "/";
+operator: '==' | '!=' | '<' | '<=' | '>' | '>=' | '+'  | '-'  | '*' | '/';
 */
 
-expression: equality;
+conditionalStatement: equality;
 equality: comparison(('!='|'==') comparison)*;
 comparison: term(('>'|'>='|'<'|'=<') term)*;
 term: factor(('-'|'+') factor)*;
@@ -134,7 +123,7 @@ factor: unary(('/'|'-') unary)*;
 unary: unary('!'|'-') unary
     | primary;
 primary: NUMBER | string | 'true' | 'false' | 'nil'
-    | '(' expression ')';
+    | '(' conditionalStatement ')';
 
 //WS
 //    : [ \t\r\n]+ -> channel(HIDDEN)
