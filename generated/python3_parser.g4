@@ -66,6 +66,7 @@ blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 
 
+
 // Jaden was here
 // S -> NA=V
 // A -> empty | + | - | * | / | % | // | ** | & | | | ^ | >> | <<
@@ -95,7 +96,6 @@ unary: unary(NOT|MINUS) unary
     | primary;
 primary: variableType | variableName | string | 'true' | 'false' | 'nil'
     | '(' conditionalStatement ')';
-
 
 
 
@@ -158,6 +158,10 @@ DIVIDE: '/';
 MULTIPLY: '*';
 PLUS: '+';
 MINUS: '-';
+MOD : '%';
+XOR : '^';
+LPAREN: '(';
+RPAREN: ')';
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 WS: [ \t\n\r]+ -> skip;
 fragment D : [0-9] ;
