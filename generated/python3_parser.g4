@@ -106,11 +106,11 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
 
 
 conditionalStatement: equality;
-equality: comparison(('!='|'==') comparison)*;
-comparison: term(('>'|'>='|'<'|'=<') term)*;
-term: factor(('-'|'+') factor)*;
-factor: unary(('/'|'*') unary)*;
-unary: unary('!'|'-') unary
+equality: comparison((NOT_EQUAL|EQUAL) comparison)*;
+comparison: term((GREATER_THAN|EQUAL_GREATER|LESS_THAN|EQUAL_LESS) term)*;
+term: factor((MINUS|PLUS) factor)*;
+factor: unary((DIVIDE|MULTIPLY) unary)*;
+unary: unary(NOT|MINUS) unary
     | primary;
 primary: variableType | variableName | string | 'true' | 'false' | 'nil'
     | '(' conditionalStatement ')';
