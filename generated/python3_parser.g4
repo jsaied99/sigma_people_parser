@@ -3,7 +3,7 @@ grammar python3_parser;
 
 
 variableName: IDENTIFIER;
-variableAssignment: variableName '=' variableType;
+variableAssignment: variableName SET variableType;
 variableType:
     number
 	| string
