@@ -1,7 +1,7 @@
 grammar python3_parser;
+AND_STATEMENT: 'and';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
-
 variableName: IDENTIFIER;
 
 variableAssignment: variableName '=' variableType;
@@ -111,7 +111,6 @@ conditionalStatement:
 	| '>='
 	| '=='
 	| '!='
-	| 'and'
 	| 'or'
 	| 'not';
 
@@ -146,7 +145,7 @@ primary: NUMBER | string | 'true' | 'false' | 'nil'
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 
 
-WS: [ \t\n\r]+ -> skip;
+
 fragment D : [0-9] ;
 INT : D+ ;
 
@@ -159,11 +158,15 @@ fragment DOT : '.';
 // NUMBER: INTEGER (DOT INTEGER)?;
 NUMBER: INTEGER (DOT INTEGER)?;
 
+//AND_STATEMENT: 'and';
+
 // making var to handle case of multiple condition
-condition_handler: condition 'AND' condition_handler | condition;
+condition_handler: condition AND_STATEMENT condition_handler | condition;
 
 // while loop
 while_statement: 'while' condition_handler':';
 
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
+
+WS: [ \t\n\r]+ -> skip;
