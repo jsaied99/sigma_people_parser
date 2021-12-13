@@ -30,8 +30,8 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
 // primitive : string | bool ;
 ifBlock:
-	'if' condition ':' blockCode
-	| 'if' condition ':' blockCode 'else:' blockCode;
+	IF condition COLON blockCode
+	| IF condition COLON blockCode ELSE blockCode;
 
 
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
@@ -142,3 +142,7 @@ fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
 SET: '=';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
+IF: 'if';
+ELSE: 'else';
+ELIF: 'elif';
+COLON: ':';
