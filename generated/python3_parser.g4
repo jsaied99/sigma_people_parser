@@ -35,8 +35,9 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 //	| IF condition COLON blockCode ELSE blockCode;
 ifBlock: IF condition_handler COLON INDENT inside;
 inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
-endIf: '\n' | NEWLINE blockCode| NEWLINE ELSE COLON INDENT inside| NEWLINE ELIF ifBlock;
+endIf:  NEWLINE blockCode| NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
 
+elif: ELIF IF condition_handler COLON INDENT inside;
 
 oneDeepIf: IF condition_handler COLON INDENTx2 insideOneIf;
 insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
@@ -52,7 +53,8 @@ endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoI
 
 
 for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON INDENT insideFor;
-insideFor:;
+insideFor: blockCode INDENT insideFor | endFor;
+endFor: NEWLINE;
 twoDeepFor: 'no';
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
@@ -195,9 +197,8 @@ fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
 AND_STATEMENT: 'and';
 SET: '=';
-IF: 'if';
+IF: 'if' | 'elif';
 ELSE: 'else';
-ELIF: 'el';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
 //need symbol for tab
