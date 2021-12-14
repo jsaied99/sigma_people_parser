@@ -47,7 +47,7 @@ endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE;
 
 threeDeepIf: IF condition_handler COLON INDENTx4 insideThreeIf;
 insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
-endThreeIf: NEWLINE | INDENT | INDENTx2 | INDENTx3 | INDENTx3 ELSE;
+endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE;
 
 twoDeepFor: 'no';
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
