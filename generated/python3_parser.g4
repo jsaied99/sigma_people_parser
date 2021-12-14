@@ -1,4 +1,5 @@
 grammar python3_parser;
+//import test;
 
 variableName: IDENTIFIER;
 variableAssignment: variableName SET variableType;
@@ -15,15 +16,15 @@ variableType:
 string : STRING ;
 // number: HEX_NUMBER | INTEGER_NUMBER;
 number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | MINUS INTEGER_NUMBER;
-testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
-bool: 'True' | 'False';
+//testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
+bool: BOOL;
 nullvalue: 'None';
 floatvalue: NUMBER;
 
-set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
-list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
+set: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
+list: BRACKET variableType (DELIM variableType)* BRACKET | BRACKET BRACKET;
 
-dict: BRACKET ( keyValuePair (',' keyValuePair)*)? BRACKET;
+dict: BRACKET ( keyValuePair (DELIM keyValuePair)*)? BRACKET;
 keyValuePair: string COLON (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
@@ -41,9 +42,15 @@ ifBlock: IF condition_handler COLON INDENT variableAssignment;
 
 // whileBlock : 'while' condition ':' blockCode ;
 
-condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
+//condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
-blockCode: 'print("hello world")' NEWLINE* | ifBlock;
+blockCode
+    : 'print("hello world")' NEWLINE*
+    | ifBlock
+    | while_statement
+    | for_statement
+    | assignmentOperators
+    ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
@@ -74,32 +81,29 @@ unary: unary(NOT|MINUS) unary
 primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
 
-
-//WS
-//    : [ \t\r\n]+ -> channel(HIDDEN)
-//;
-//
-//COMMENT
-//    : '#' .*? -> skip
-//;
-
-
-// NUMBER: INTEGER (DOT INTEGER)?;
-
-
 // making var to handle case of multiple condition
+condition_handler: conditionalStatement COMBINE condition_handler | conditionalStatement;
+
 condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
 // while loop
+while_statement: LOOP condition_handler COLON;
 //while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
 
 while_test: WHILE COLON INDENT;
 // for loop
+for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON;
+
+COMBINE: 'AND' | 'OR';
+RANGE: 'in range';
+BOOL: 'True' | 'False';
+LOOP: 'while' | 'for';
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
 INDENT: NEWLINE TAB+;
 indent_test: INDENT;
 
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
+DELIM: ',';
 fragment STRING_LITERAL:
 	'a' ..'z'
 	| 'A' ..'Z'
@@ -135,9 +139,7 @@ XOR : '^';
 LPAREN: '(';
 RPAREN: ')';
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
-
-//COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
-
+WS: [ \t\n\r]+ -> skip;
 fragment D : [0-9] ;
 INT : D+ ;
 fragment DIGIT2: '0' ..'9';
