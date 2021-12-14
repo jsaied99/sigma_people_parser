@@ -44,13 +44,13 @@ ifBlock: IF condition_handler COLON INDENT variableAssignment;
 
 //condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
-blockCode
-    : 'print("hello world")' NEWLINE*
-    | ifBlock
-    | while_statement
-    | for_statement
-    | assignmentOperators
-    ;
+//blockCode
+//    : 'print("hello world")' NEWLINE*
+//    | ifBlock
+//    | while_statement
+//    | for_statement
+//    | assignmentOperators
+//    ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
@@ -84,12 +84,12 @@ primary: variableType | variableName | string | bool | nullvalue
 // making var to handle case of multiple condition
 condition_handler: conditionalStatement COMBINE condition_handler | conditionalStatement;
 
-condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
+//condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
 // while loop
 while_statement: LOOP condition_handler COLON;
 //while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
 
-while_test: WHILE COLON INDENT;
+//while_test: WHILE COLON INDENT;
 // for loop
 for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON;
 
@@ -97,7 +97,7 @@ COMBINE: 'AND' | 'OR';
 RANGE: 'in range';
 BOOL: 'True' | 'False';
 LOOP: 'while' | 'for';
-for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
+//for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
 INDENT: NEWLINE TAB+;
 indent_test: INDENT;
 
@@ -151,14 +151,13 @@ SET: '=';
 IF: 'if';
 ELSE: 'else';
 ELIF: 'elif';
-WHILE: 'while';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
 //need symbol for tab
 fragment SPACE_TEST: ' ';
 TAB: SPACE_TEST SPACE_TEST SPACE_TEST SPACE_TEST;
 tab_test: TAB;
-WS: [ \n\r]+ -> skip;
+//WS: [ \n\r]+ -> skip;
 //OPTIONAL_SPACE: ' ' | ;
 //DOUBLESPACE: '  ';
 SEMICOLON: ';';
