@@ -33,8 +33,23 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 //ifBlock:
 //	IF condition COLON blockCode
 //	| IF condition COLON blockCode ELSE blockCode;
-ifBlock: IF condition_handler COLON INDENT variableAssignment;
+ifBlock: IF condition_handler COLON INDENT inside;
+inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
+endIf: '\n' | NEWLINE blockCode| NEWLINE ELSE | NEWLINE 'el' ifBlock;
 
+oneDeepIf: IF condition_handler COLON INDENTx2 insideOneIf;
+insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
+endOneIf: NEWLINE | INDENT inside | INDENT ELSE;
+
+twoDeepIf: IF condition_handler COLON INDENTx3 insideTwoIf;
+insideTwoIf: blockCode INDENTx3 insideTwoIf | blockCode endTwoIf | threeDeepIf;
+endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE;
+
+threeDeepIf: IF condition_handler COLON INDENTx4 insideThreeIf;
+insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
+endThreeIf: NEWLINE | INDENT | INDENTx2 | INDENTx3 | INDENTx3 ELSE;
+
+twoDeepFor: 'no';
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
 
@@ -44,13 +59,38 @@ ifBlock: IF condition_handler COLON INDENT variableAssignment;
 
 //condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
-//blockCode
-//    : 'print("hello world")' NEWLINE*
-//    | ifBlock
-//    | while_statement
-//    | for_statement
-//    | assignmentOperators
-//    ;
+/*
+IF -> if statement: INDENT INSIDE
+INSIDE -> BLOCK INDENT INDISE | END | 1-DEEP-IF
+END -> NEWLINE | NEWLINE else | NEWLINE el IF
+
+1-DEEP-IF -> if statement: INDENTx2 INSIDEx2
+INSIDEx3 -> BLOCK INDENTx2 INDISEx3 | ENDx2 | 2-DEEP-IF | 2-DEEP-FOR
+ENDx2 -> INDENT | INDENT else
+
+2-DEEP-IF -> if statement: INDENTx3 INSIDEx3
+INSIDEx3 -> BLOCK INDENTx3 INDISEx3 | ENDx3 | 3-DEEP-IF
+ENDx3 -> INDENTx2 | INDENTx2 else
+
+3-DEEP-IF -> if statement: INDENTx4 INSIDEx4
+INSIDEx4 -> BLOCK INDENTx4 INDISEx4 | ENDx4
+ENDx4 -> INDENTx3 | INDENTx3 else
+
+FOR -> for statement: INDENT INSIDE-FOR
+INSIDE-FOR -> BLOCK INDENT INSIDE | NEWLINE | 1-DEEP-IF
+
+2-DEEP-FOR -> for statement: INDENTx3 INSIDE-FORx2
+INSIDE-FORx2 -> BLOCK INDENTx3 INSIDE-FORx2 | INDENTx2 | 3-DEEP-IF
+*/
+
+
+blockCode
+    : 'print("hello world")' NEWLINE*
+    //| ifBlock
+    | while_statement
+    //| for_statement
+    | assignmentOperators
+    ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
@@ -98,7 +138,10 @@ RANGE: 'in range';
 BOOL: 'True' | 'False';
 LOOP: 'while' | 'for';
 //for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
-INDENT: NEWLINE TAB+;
+INDENTx4: INDENTx3 TAB;
+INDENTx3: INDENTx2 TAB;
+INDENTx2: INDENT TAB;
+INDENT: NEWLINE TAB;
 indent_test: INDENT;
 
 BRACKET: '[' | ']' | '{' | '}';
