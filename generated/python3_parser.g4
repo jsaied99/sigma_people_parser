@@ -1,4 +1,5 @@
 grammar python3_parser;
+import test;
 
 variableName: IDENTIFIER;
 variableAssignment: variableName SET variableType;
@@ -43,7 +44,12 @@ ifBlock:
 
 condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
-blockCode: 'print("hello world")' NEWLINE* | ifBlock;
+blockCode
+    : 'print("hello world")' NEWLINE*
+    | ifBlock
+    | while_statement
+    | for_statement
+    ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
@@ -75,9 +81,9 @@ primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
 
 
-//WS
-//    : [ \t\r\n]+ -> channel(HIDDEN)
-//;
+WS
+: [ \r\n\t] + -> skip
+     ;
 //
 //COMMENT
 //    : '#' .*? -> skip
