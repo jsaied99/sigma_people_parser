@@ -1,17 +1,7 @@
 grammar python3_parser;
-AND_STATEMENT: 'and';
-COLON: ':';
-WHILE: 'while';
-IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
-
-WS
-   : [ \r\n\t] + -> channel (HIDDEN)
-   ;
 
 variableName: IDENTIFIER;
-
-variableAssignment: variableName '=' variableType;
-
+variableAssignment: variableName SET variableType;
 variableType:
     number
 	| string
@@ -22,61 +12,26 @@ variableType:
 	| set
 	| list
 	| dict;
-
-
 string : STRING ;
-STRING: '"' STRING_LITERAL* '"';
-fragment STRING_LITERAL:
-	'a' ..'z'
-	| 'A' ..'Z'
-	| '0' ..'9'
-	| ':'
-	| '.'
-	| '&'
-	| '/'
-	| '\\'
-	| ';';
-//	| ' ';
-
-// number: DECIMAL_INTEGER;
-fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
-
-fragment DIGIT: ('0' ..'9');
-
 // number: HEX_NUMBER | INTEGER_NUMBER;
-number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | '-'INTEGER_NUMBER;
-
-HEX_NUMBER: '0' 'x' HEX_DIGIT+;
-
-INTEGER_NUMBER: [0-9]+;
-
-
+number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | MINUS INTEGER_NUMBER;
 testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
-
-DECIMAL_INTEGER: NON_ZERO_DIGIT DIGIT* | '0'+;
-
-NON_ZERO_DIGIT: [1-9];
-// DIGIT: [0-9];
-
 bool: 'True' | 'False';
 nullvalue: 'None';
-
 floatvalue: NUMBER;
 
+set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
+list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
 
-
-set: '(' variableType (',' variableType)* ')' | '(' ')';
-list: '[' variableType (',' variableType)* ']' | '[' ']';
-
-dict: '{' ( keyValuePair (',' keyValuePair)*)? '}';
-keyValuePair: string ':' (variableType | dict);
+dict: BRACKET ( keyValuePair (',' keyValuePair)*)? BRACKET;
+keyValuePair: string COLON (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
-NEWLINE: [\r\n]+;
+
 // primitive : string | bool ;
 ifBlock:
-	'if' condition ':' blockCode
-	| 'if' condition ':' blockCode 'else:' blockCode;
+	IF condition COLON blockCode
+	| IF condition COLON blockCode ELSE blockCode;
 
 
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
@@ -90,8 +45,7 @@ condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variab
 
 blockCode: 'print("hello world")' NEWLINE* | ifBlock;
 
-arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
-
+arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 
 // Jaden was here
 // S -> NA=V
@@ -100,37 +54,26 @@ arithmeticOperands: '+' | '-' | '/' | '*' | '%' | '^';
 // N -> var_name
 // V -> value | E | N
 // E -> VOV
-assignmentOperators: variableName ('=' | assignmentPreOperand '=') assigned;
-assignmentPreOperand: arithmeticOperands | '//' | '**' | '&' | '|' | '<<' | '>>' ;
-assigned: variableName | variableType | arithmeticOperation;
+assignmentOperators: variableName (SET | assignmentPreOperand SET) assigned;
+assignmentPreOperand: arithmeticOperands | PRESETOPERAND;
+assigned: variableType | arithmeticOperation;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | floatvalue
     | number
     | variableName
-    | '(' arithmeticOperation ')'
+    | LPAREN arithmeticOperation RPAREN
     ;
 
-/*
-expression: literal
-	| unary
-	| binary
-	| grouping;
-literal: NUMBER | STRING | 'true' | 'false' | 'nil';
-grouping: '('expression')';
-unary: ( '-' | '!' ) expression;
-binary: expression operator expression;
-operator: '==' | '!=' | '<' | '<=' | '>' | '>=' | '+'  | '-'  | '*' | '/';
-*/
-
 conditionalStatement: equality;
-equality: comparison(('!='|'==') comparison)*;
-comparison: term(('>'|'>='|'<'|'=<') term)*;
-term: factor(('-'|'+') factor)*;
-factor: unary(('/'|'-') unary)*;
-unary: unary('!'|'-') unary
+equality: comparison((NOT_EQUAL|EQUAL) comparison)*;
+comparison: term((GREATER_THAN|EQUAL_GREATER|LESS_THAN|EQUAL_LESS) term)*;
+term: factor((MINUS|PLUS) factor)*;
+factor: unary((DIVIDE|MULTIPLY) unary)*;
+unary: unary(NOT|MINUS) unary
     | primary;
-primary: variableType | variableName | string | 'true' | 'false' | 'nil'
-    | '(' conditionalStatement ')';
+primary: variableType | variableName | string | bool | nullvalue
+    | LPAREN conditionalStatement RPAREN;
+
 
 //WS
 //    : [ \t\r\n]+ -> channel(HIDDEN)
@@ -139,21 +82,75 @@ primary: variableType | variableName | string | 'true' | 'false' | 'nil'
 //COMMENT
 //    : '#' .*? -> skip
 //;
+
+
+// NUMBER: INTEGER (DOT INTEGER)?;
+
+
+// making var to handle case of multiple condition
+condition_handler: condition 'AND' condition_handler | condition;
+
+// while loop
+while_statement: 'while' condition_handler COLON;
+
+// for loop
+for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
+
+
+BRACKET: '[' | ']' | '{' | '}';
+STRING: '"' STRING_LITERAL* '"';
+fragment STRING_LITERAL:
+	'a' ..'z'
+	| 'A' ..'Z'
+	| '0' ..'9'
+	| ':'
+	| '.'
+	| '&'
+	| '/'
+	| '\\'
+	| ';'
+	| ' ';
+PRESETOPERAND: '//' | '**' | '&' | '|' | '<<' | '>>';
+fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
+fragment DIGIT: ('0' ..'9');
+HEX_NUMBER: '0' 'x' HEX_DIGIT+;
+INTEGER_NUMBER: [0-9]+;
+DECIMAL_INTEGER: NON_ZERO_DIGIT DIGIT* | '0'+;
+NON_ZERO_DIGIT: [1-9];
+NEWLINE: [\r\n]+;
+EQUAL: '==';
+NOT_EQUAL: '!=';
+EQUAL_GREATER: '>=';
+GREATER_THAN: '>';
+EQUAL_LESS: '<=';
+LESS_THAN: '<';
+NOT: '!';
+DIVIDE: '/';
+MULTIPLY: '*';
+PLUS: '+';
+MINUS: '-';
+MOD : '%';
+XOR : '^';
+LPAREN: '(';
+RPAREN: ')';
+COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
+WS: [ \t\n\r]+ -> skip;
 //COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 EQUALITY: '==';
 
 
 fragment D : [0-9] ;
 INT : D+ ;
-
 fragment DIGIT2: '0' ..'9';
-
 fragment INTEGER: DIGIT2+;
-
 fragment DOT : '.';
-
-// NUMBER: INTEGER (DOT INTEGER)?;
 NUMBER: INTEGER (DOT INTEGER)?;
+SET: '=';
+IF: 'if';
+ELSE: 'else';
+ELIF: 'elif';
+IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
+COLON: ':';
 
 //need symbol for tab
 //TAB: '    ';
