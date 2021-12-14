@@ -24,7 +24,7 @@ set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
 list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
 
 dict: BRACKET ( keyValuePair (',' keyValuePair)*)? BRACKET;
-keyValuePair: string ':' (variableType | dict);
+keyValuePair: string COLON (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
@@ -96,6 +96,7 @@ while_statement: 'while' condition_handler':';
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
 
+
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
 fragment STRING_LITERAL:
@@ -141,8 +142,8 @@ fragment INTEGER: DIGIT2+;
 fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
 SET: '=';
-IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 IF: 'if';
 ELSE: 'else';
 ELIF: 'elif';
+IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
