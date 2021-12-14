@@ -50,6 +50,9 @@ threeDeepIf: IF condition_handler COLON INDENTx4 insideThreeIf;
 insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
 endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE COLON INDENTx4 insideThreeIf;
 
+
+for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON INDENT insideFor;
+insideFor:;
 twoDeepFor: 'no';
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
@@ -132,7 +135,7 @@ while_statement: LOOP condition_handler COLON;
 
 //while_test: WHILE COLON INDENT;
 // for loop
-for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON;
+
 
 COMBINE: 'AND' | 'OR';
 RANGE: 'in range';
