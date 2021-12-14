@@ -30,8 +30,8 @@ keyValuePair: string COLON (variableType | dict);
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
 ifBlock:
-	IF condition COLON blockCode
-	| IF condition COLON blockCode ELSE blockCode;
+	IF conditionalStatement COLON blockCode
+	| IF conditionalStatement COLON blockCode ELSE blockCode;
 
 
 
@@ -70,13 +70,14 @@ INSIDE-FORx2 -> BLOCK INDENTx3 INSIDE-FORx2 | INDENTx2 | 3-DEEP-IF
 
 // whileBlock : 'while' condition ':' blockCode ;
 
-condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
+//condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
 
 blockCode
     : 'print("hello world")' NEWLINE*
     | ifBlock
     | while_statement
     | for_statement
+    | assignmentOperators
     ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
@@ -109,7 +110,7 @@ primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
 
 // making var to handle case of multiple condition
-condition_handler: condition COMBINE condition_handler | condition;
+condition_handler: conditionalStatement COMBINE condition_handler | conditionalStatement;
 
 // while loop
 while_statement: LOOP condition_handler COLON;
