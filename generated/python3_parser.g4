@@ -1,6 +1,8 @@
 grammar python3_parser;
 //import test;
 
+
+
 variableName: IDENTIFIER;
 variableType:
     number
@@ -27,37 +29,48 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
 // primitive : string | bool ;
 
-ifBlock: IF condition COLON INDENT inside;
-inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
-endIf:  NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
+//==================================================================================================
+// IF STATEMENTS
+//==================================================================================================
+ifBlock: IF condition COLON inside;
+inside: (INDENT (blockCode | oneDeepIf))+ endIf*;
+endIf:  NEWLINE ELSE COLON inside | NEWLINE | NEWLINE ifBlock;
 
-oneDeepIf: IF condition COLON INDENTx2 insideOneIf;
-insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
-endOneIf: NEWLINE | INDENT inside | INDENT ELSE COLON INDENTx2 insideOneIf;
+oneDeepIf: IF condition COLON insideOneIf;
+insideOneIf: (INDENTx2 (blockCode | twoDeepIf | twoDeepFor))+ endOneIf*;
+endOneIf: NEWLINE | INDENT ELSE COLON insideOneIf;
 
-twoDeepIf: IF condition COLON INDENTx3 insideTwoIf;
-insideTwoIf: blockCode INDENTx3 insideTwoIf | blockCode endTwoIf | threeDeepIf;
-endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE COLON INDENTx3 insideTwoIf;
+twoDeepIf: IF condition COLON insideTwoIf;
+insideTwoIf: (INDENTx3 (blockCode | threeDeepIf ))+ endTwoIf*;
+endTwoIf: NEWLINE | INDENTx2 ELSE COLON insideTwoIf;
 
-threeDeepIf: IF condition COLON INDENTx4 insideThreeIf;
-insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
-endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE COLON INDENTx4 insideThreeIf;
+threeDeepIf: IF condition COLON  insideThreeIf;
+insideThreeIf: (INDENTx4 blockCode)+ endThreeIf*;
+endThreeIf: NEWLINE | INDENTx3 ELSE COLON insideThreeIf;
 
+//==================================================================================================
+// FOR LOOPS
+//==================================================================================================
 
+//Looping range
 forRange: variableName RANGE LPAREN IDENTIFIER+ RPAREN | 'range';// TODO: for debug remove | 'range'
 
-for_statement: LOOP forRange COLON INDENT insideFor;
-insideFor: blockCode INDENT insideFor | blockCode endFor | oneDeepIf;
+//Non-nested for
+for_statement: LOOP forRange COLON insideFor;
+insideFor: (INDENT (blockCode | oneDeepIf))+ endFor*;
 endFor: NEWLINE;
 
-twoDeepFor: LOOP forRange COLON INDENTx3 insideTwoFor;
-insideTwoFor: blockCode INDENTx3 insideTwoFor | blockCode endTwoFor | threeDeepIf;
-endTwoFor: NEWLINE | INDENT insideFor | INDENTx2 insideOneIf;
+//double-nested for
+twoDeepFor: LOOP forRange COLON insideTwoFor;
+insideTwoFor: (INDENTx3 (blockCode | threeDeepIf))+ endTwoFor*;
+endTwoFor: NEWLINE;
 
-// whileBlock : 'while' condition ':' blockCode ;
+//==================================================================================================
+// WHILE LOOPS
+//==================================================================================================
 
-while_statement: LOOP condition COLON INDENT insideWhile;
-insideWhile: blockCode INDENT insideWhile | endWhile | oneDeepIf;
+while_statement: LOOP condition COLON insideWhile;
+insideWhile: (INDENT (blockCode | oneDeepIf))+ endWhile*;
 endWhile: NEWLINE;
 
 print: PRINT LPAREN STRING RPAREN;
