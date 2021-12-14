@@ -35,19 +35,20 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 //	| IF condition COLON blockCode ELSE blockCode;
 ifBlock: IF condition_handler COLON INDENT inside;
 inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
-endIf: '\n' | NEWLINE blockCode| NEWLINE ELSE | NEWLINE 'el' ifBlock;
+endIf: '\n' | NEWLINE blockCode| NEWLINE ELSE COLON INDENT inside| NEWLINE ELIF ifBlock;
+
 
 oneDeepIf: IF condition_handler COLON INDENTx2 insideOneIf;
 insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
-endOneIf: NEWLINE | INDENT inside | INDENT ELSE;
+endOneIf: NEWLINE | INDENT inside | INDENT ELSE COLON INDENTx2 insideOneIf;
 
 twoDeepIf: IF condition_handler COLON INDENTx3 insideTwoIf;
 insideTwoIf: blockCode INDENTx3 insideTwoIf | blockCode endTwoIf | threeDeepIf;
-endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE;
+endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE COLON INDENTx3 insideTwoIf;
 
 threeDeepIf: IF condition_handler COLON INDENTx4 insideThreeIf;
 insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
-endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE;
+endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE COLON INDENTx4 insideThreeIf;
 
 twoDeepFor: 'no';
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
@@ -193,7 +194,7 @@ AND_STATEMENT: 'and';
 SET: '=';
 IF: 'if';
 ELSE: 'else';
-ELIF: 'elif';
+ELIF: 'el';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
 //need symbol for tab
