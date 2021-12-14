@@ -33,27 +33,32 @@ operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 //ifBlock:
 //	IF condition COLON blockCode
 //	| IF condition COLON blockCode ELSE blockCode;
-ifBlock: IF condition_handler COLON INDENT inside;
+ifBlock: IF condition COLON INDENT inside;
 inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
-endIf:  NEWLINE blockCode| NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
+endIf:  NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
 
-oneDeepIf: IF condition_handler COLON INDENTx2 insideOneIf;
+oneDeepIf: IF condition COLON INDENTx2 insideOneIf;
 insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
 endOneIf: NEWLINE | INDENT inside | INDENT ELSE COLON INDENTx2 insideOneIf;
 
-twoDeepIf: IF condition_handler COLON INDENTx3 insideTwoIf;
+twoDeepIf: IF condition COLON INDENTx3 insideTwoIf;
 insideTwoIf: blockCode INDENTx3 insideTwoIf | blockCode endTwoIf | threeDeepIf;
 endTwoIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx2 ELSE COLON INDENTx3 insideTwoIf;
 
-threeDeepIf: IF condition_handler COLON INDENTx4 insideThreeIf;
+threeDeepIf: IF condition COLON INDENTx4 insideThreeIf;
 insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
 endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE COLON INDENTx4 insideThreeIf;
 
 
-for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON INDENT insideFor;
-insideFor: blockCode INDENT insideFor | endFor;
+forRange: variableName RANGE LPAREN IDENTIFIER+ RPAREN | 'range';
+
+for_statement: LOOP forRange COLON INDENT insideFor;
+insideFor: blockCode INDENT insideFor | blockCode endFor | oneDeepIf;
 endFor: NEWLINE;
-twoDeepFor: 'no';
+
+twoDeepFor: LOOP forRange COLON INDENTx3 insideTwoFor;
+insideTwoFor: blockCode INDENTx3 insideTwoFor | blockCode endTwoFor | threeDeepIf;
+endTwoFor: NEWLINE | INDENT insideFor | INDENTx2 insideOneIf;
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
 
@@ -87,13 +92,13 @@ INSIDE-FOR -> BLOCK INDENT INSIDE | NEWLINE | 1-DEEP-IF
 INSIDE-FORx2 -> BLOCK INDENTx3 INSIDE-FORx2 | INDENTx2 | 3-DEEP-IF
 */
 
+print: PRINT LPAREN STRING RPAREN;
 
 blockCode
-    : 'print("hello world")' NEWLINE*
-    //| ifBlock
+    : print
     | while_statement
-    //| for_statement
     | assignmentOperators
+    | CTRL_FLOW
     ;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
@@ -125,6 +130,8 @@ unary: unary(NOT|MINUS) unary
 primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
 
+condition: condition_handler | (condition_handler);
+
 // making var to handle case of multiple condition
 condition_handler: conditionalStatement COMBINE condition_handler | conditionalStatement;
 
@@ -136,7 +143,7 @@ while_statement: LOOP condition_handler COLON;
 //while_test: WHILE COLON INDENT;
 // for loop
 
-
+PRINT: 'print';
 COMBINE: 'AND' | 'OR';
 RANGE: 'in range';
 BOOL: 'True' | 'False';
@@ -147,7 +154,7 @@ INDENTx3: INDENTx2 TAB;
 INDENTx2: INDENT TAB;
 INDENT: NEWLINE TAB;
 indent_test: INDENT;
-
+CTRL_FLOW: 'break' | 'continue';
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
 DELIM: ',';
