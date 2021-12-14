@@ -29,10 +29,10 @@ keyValuePair: string COLON (variableType | dict);
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
 // primitive : string | bool ;
-ifBlock:
-	IF condition COLON blockCode
-	| IF condition COLON blockCode ELSE blockCode;
-
+//ifBlock:
+//	IF condition COLON blockCode
+//	| IF condition COLON blockCode ELSE blockCode;
+ifBlock: IF condition_handler COLON INDENT variableAssignment;
 
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
@@ -88,14 +88,15 @@ primary: variableType | variableName | string | bool | nullvalue
 
 
 // making var to handle case of multiple condition
-condition_handler: condition 'AND' condition_handler | condition;
-
+condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
 // while loop
-while_statement: 'while' condition_handler COLON;
+//while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
 
+while_test: WHILE COLON INDENT;
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
-
+INDENT: NEWLINE TAB+;
+indent_test: INDENT;
 
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
@@ -134,10 +135,8 @@ XOR : '^';
 LPAREN: '(';
 RPAREN: ')';
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
-WS: [ \t\n\r]+ -> skip;
-//COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
-EQUALITY: '==';
 
+//COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
 
 fragment D : [0-9] ;
 INT : D+ ;
@@ -145,28 +144,22 @@ fragment DIGIT2: '0' ..'9';
 fragment INTEGER: DIGIT2+;
 fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
+AND_STATEMENT: 'and';
 SET: '=';
 IF: 'if';
 ELSE: 'else';
 ELIF: 'elif';
+WHILE: 'while';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
-
 //need symbol for tab
-//TAB: '    ';
+fragment SPACE_TEST: ' ';
+TAB: SPACE_TEST SPACE_TEST SPACE_TEST SPACE_TEST;
+tab_test: TAB;
+WS: [ \n\r]+ -> skip;
 //OPTIONAL_SPACE: ' ' | ;
 //DOUBLESPACE: '  ';
 SEMICOLON: ';';
-INDENT: '\n    ';
+//INDENT: '\n    ';
 //AND_STATEMENT: 'and';
 //tab_test: TAB;
-
-// making var to handle case of multiple condition
-condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
-// while loop
-while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
-
-while_test: WHILE;
-// for loop
-for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
-
