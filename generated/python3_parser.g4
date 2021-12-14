@@ -1,7 +1,12 @@
 grammar python3_parser;
 AND_STATEMENT: 'and';
-
+COLON: ':';
+WHILE: 'while';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
+
+WS
+   : [ \r\n\t] + -> channel (HIDDEN)
+   ;
 
 variableName: IDENTIFIER;
 
@@ -30,8 +35,8 @@ fragment STRING_LITERAL:
 	| '&'
 	| '/'
 	| '\\'
-	| ';'
-	| ' ';
+	| ';';
+//	| ' ';
 
 // number: DECIMAL_INTEGER;
 fragment HEX_DIGIT: ('0' ..'9' | 'a' ..'f' | 'A' ..'F');
@@ -134,8 +139,8 @@ primary: variableType | variableName | string | 'true' | 'false' | 'nil'
 //COMMENT
 //    : '#' .*? -> skip
 //;
-COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
-
+//COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
+EQUALITY: '==';
 
 
 fragment D : [0-9] ;
@@ -150,15 +155,21 @@ fragment DOT : '.';
 // NUMBER: INTEGER (DOT INTEGER)?;
 NUMBER: INTEGER (DOT INTEGER)?;
 
+//need symbol for tab
+//TAB: '    ';
+//OPTIONAL_SPACE: ' ' | ;
+//DOUBLESPACE: '  ';
+SEMICOLON: ';';
+INDENT: '\n    ';
 //AND_STATEMENT: 'and';
+//tab_test: TAB;
 
 // making var to handle case of multiple condition
-condition_handler: condition AND_STATEMENT condition_handler | condition;
-
+condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
 // while loop
-while_statement: 'while' condition_handler':';
+while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
 
+while_test: WHILE;
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
 
-WS: [ \t\n\r]+ -> skip;
