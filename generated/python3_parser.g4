@@ -2,11 +2,9 @@ grammar python3_parser;
 //import test;
 
 variableName: IDENTIFIER;
-variableAssignment: variableName SET variableType;
 variableType:
     number
 	| string
-	// | number
 	| bool
 	| nullvalue
 	| floatvalue
@@ -14,11 +12,9 @@ variableType:
 	| list
 	| dict;
 string : STRING ;
-// number: HEX_NUMBER | INTEGER_NUMBER;
 number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | MINUS INTEGER_NUMBER;
-//testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
 bool: BOOL;
-nullvalue: 'None';
+nullvalue: 'None';//TODO: what is this?
 floatvalue: NUMBER;
 
 set: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
@@ -30,9 +26,7 @@ keyValuePair: string COLON (variableType | dict);
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
 // primitive : string | bool ;
-//ifBlock:
-//	IF condition COLON blockCode
-//	| IF condition COLON blockCode ELSE blockCode;
+
 ifBlock: IF condition COLON INDENT inside;
 inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
 endIf:  NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
@@ -50,7 +44,7 @@ insideThreeIf: blockCode INDENTx4 insideThreeIf | blockCode endThreeIf;
 endThreeIf: NEWLINE | INDENT inside | INDENTx2 insideOneIf | INDENTx3 insideTwoIf | INDENTx3 ELSE COLON INDENTx4 insideThreeIf;
 
 
-forRange: variableName RANGE LPAREN IDENTIFIER+ RPAREN | 'range';
+forRange: variableName RANGE LPAREN IDENTIFIER+ RPAREN | 'range';// TODO: for debug remove | 'range'
 
 for_statement: LOOP forRange COLON INDENT insideFor;
 insideFor: blockCode INDENT insideFor | blockCode endFor | oneDeepIf;
@@ -59,38 +53,12 @@ endFor: NEWLINE;
 twoDeepFor: LOOP forRange COLON INDENTx3 insideTwoFor;
 insideTwoFor: blockCode INDENTx3 insideTwoFor | blockCode endTwoFor | threeDeepIf;
 endTwoFor: NEWLINE | INDENT insideFor | INDENTx2 insideOneIf;
-// NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
-
-
-// ifElseBlock : 'if' condition ':' blockCode 'else:' blockCode ;
 
 // whileBlock : 'while' condition ':' blockCode ;
 
-//condition: (IDENTIFIER | variableType) conditionalStatement (IDENTIFIER | variableType);
-
-/*
-IF -> if statement: INDENT INSIDE
-INSIDE -> BLOCK INDENT INDISE | END | 1-DEEP-IF
-END -> NEWLINE | NEWLINE else | NEWLINE el IF
-
-1-DEEP-IF -> if statement: INDENTx2 INSIDEx2
-INSIDEx3 -> BLOCK INDENTx2 INDISEx3 | ENDx2 | 2-DEEP-IF | 2-DEEP-FOR
-ENDx2 -> INDENT | INDENT else
-
-2-DEEP-IF -> if statement: INDENTx3 INSIDEx3
-INSIDEx3 -> BLOCK INDENTx3 INDISEx3 | ENDx3 | 3-DEEP-IF
-ENDx3 -> INDENTx2 | INDENTx2 else
-
-3-DEEP-IF -> if statement: INDENTx4 INSIDEx4
-INSIDEx4 -> BLOCK INDENTx4 INDISEx4 | ENDx4
-ENDx4 -> INDENTx3 | INDENTx3 else
-
-FOR -> for statement: INDENT INSIDE-FOR
-INSIDE-FOR -> BLOCK INDENT INSIDE | NEWLINE | 1-DEEP-IF
-
-2-DEEP-FOR -> for statement: INDENTx3 INSIDE-FORx2
-INSIDE-FORx2 -> BLOCK INDENTx3 INSIDE-FORx2 | INDENTx2 | 3-DEEP-IF
-*/
+while_statement: LOOP condition COLON INDENT insideWhile;
+insideWhile: blockCode INDENT insideWhile | endWhile | oneDeepIf;
+endWhile: NEWLINE;
 
 print: PRINT LPAREN STRING RPAREN;
 
@@ -137,7 +105,7 @@ condition_handler: conditionalStatement COMBINE condition_handler | conditionalS
 
 //condition_handler: conditionalStatement AND_STATEMENT condition_handler | conditionalStatement;
 // while loop
-while_statement: LOOP condition_handler COLON;
+
 //while_statement: WHILE ' ' condition_handler COLON NEWLINE SEMICOLON;
 
 //while_test: WHILE COLON INDENT;
