@@ -37,8 +37,6 @@ ifBlock: IF condition_handler COLON INDENT inside;
 inside: blockCode INDENT inside | blockCode endIf | oneDeepIf;
 endIf:  NEWLINE blockCode| NEWLINE ELSE COLON INDENT inside | NEWLINE | NEWLINE ifBlock;
 
-elif: ELIF IF condition_handler COLON INDENT inside;
-
 oneDeepIf: IF condition_handler COLON INDENTx2 insideOneIf;
 insideOneIf: blockCode INDENTx2 insideOneIf | blockCode endOneIf | twoDeepIf | twoDeepFor;
 endOneIf: NEWLINE | INDENT inside | INDENT ELSE COLON INDENTx2 insideOneIf;
