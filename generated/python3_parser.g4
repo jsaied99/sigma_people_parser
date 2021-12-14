@@ -1,5 +1,5 @@
 grammar python3_parser;
-import test;
+//import test;
 
 variableName: IDENTIFIER;
 variableAssignment: variableName SET variableType;
@@ -16,15 +16,15 @@ variableType:
 string : STRING ;
 // number: HEX_NUMBER | INTEGER_NUMBER;
 number: INT | INTEGER_NUMBER | NON_ZERO_DIGIT | MINUS INTEGER_NUMBER;
-testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
-bool: 'True' | 'False';
+//testingFloat: INTEGER_NUMBER+ '.' INTEGER_NUMBER+;
+bool: BOOL;
 nullvalue: 'None';
 floatvalue: NUMBER;
 
-set: LPAREN variableType (',' variableType)* RPAREN | LPAREN RPAREN;
-list: BRACKET variableType (',' variableType)* BRACKET | BRACKET BRACKET;
+set: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
+list: BRACKET variableType (DELIM variableType)* BRACKET | BRACKET BRACKET;
 
-dict: BRACKET ( keyValuePair (',' keyValuePair)*)? BRACKET;
+dict: BRACKET ( keyValuePair (DELIM keyValuePair)*)? BRACKET;
 keyValuePair: string COLON (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
@@ -80,10 +80,6 @@ unary: unary(NOT|MINUS) unary
 primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
 
-
-WS
-: [ \r\n\t] + -> skip
-     ;
 //
 //COMMENT
 //    : '#' .*? -> skip
@@ -94,17 +90,21 @@ WS
 
 
 // making var to handle case of multiple condition
-condition_handler: condition 'AND' condition_handler | condition;
+condition_handler: condition COMBINE condition_handler | condition;
 
 // while loop
-while_statement: 'while' condition_handler COLON;
+while_statement: LOOP condition_handler COLON;
 
 // for loop
-for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
+for_statement: LOOP variableName RANGE LPAREN IDENTIFIER+ RPAREN COLON;
 
-
+COMBINE: 'AND' | 'OR';
+RANGE: 'in range';
+BOOL: 'True' | 'False';
+LOOP: 'while' | 'for';
 BRACKET: '[' | ']' | '{' | '}';
 STRING: '"' STRING_LITERAL* '"';
+DELIM: ',';
 fragment STRING_LITERAL:
 	'a' ..'z'
 	| 'A' ..'Z'
