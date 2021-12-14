@@ -72,7 +72,7 @@ factor: unary((DIVIDE|MULTIPLY) unary)*;
 unary: unary(NOT|MINUS) unary
     | primary;
 primary: variableType | variableName | string | bool | nullvalue
-    | '(' conditionalStatement ')';
+    | LPAREN conditionalStatement RPAREN;
 
 
 //WS
@@ -91,7 +91,7 @@ primary: variableType | variableName | string | bool | nullvalue
 condition_handler: condition 'AND' condition_handler | condition;
 
 // while loop
-while_statement: 'while' condition_handler':';
+while_statement: 'while' condition_handler COLON;
 
 // for loop
 for_statement: 'for' variableName 'in range('IDENTIFIER+ '):';
