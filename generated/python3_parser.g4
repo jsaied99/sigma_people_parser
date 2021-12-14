@@ -33,7 +33,37 @@ ifBlock:
 	IF condition COLON blockCode
 	| IF condition COLON blockCode ELSE blockCode;
 
+
+
+/*
+IF -> if statement: INDENT INSIDE
+INSIDE -> BLOCK INDENT INDISE | END | 1-DEEP-IF
+END -> NEWLINE | NEWLINE else | NEWLINE el IF
+
+1-DEEP-IF -> if statement: INDENTx2 INSIDEx2
+INSIDEx3 -> BLOCK INDENTx2 INDISEx3 | ENDx2 | 2-DEEP-IF | 2-DEEP-FOR
+ENDx2 -> INDENT | INDENT else
+
+2-DEEP-IF -> if statement: INDENTx3 INSIDEx3
+INSIDEx3 -> BLOCK INDENTx3 INDISEx3 | ENDx3 | 3-DEEP-IF
+ENDx3 -> INDENTx2 | INDENTx2 else
+
+3-DEEP-IF -> if statement: INDENTx4 INSIDEx4
+INSIDEx4 -> BLOCK INDENTx4 INDISEx4 | ENDx4
+ENDx4 -> INDENTx3 | INDENTx3 else
+
+FOR -> for statement: INDENT INSIDE-FOR
+INSIDE-FOR -> BLOCK INDENT INSIDE | NEWLINE | 1-DEEP-IF
+
+2-DEEP-FOR -> for statement: INDENTx3 INSIDE-FORx2
+INSIDE-FORx2 -> BLOCK INDENTx3 INSIDE-FORx2 | INDENTx2 | 3-DEEP-IF
+*/
+
+
+
+
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
+
 
 
 // ifElseBlock : 'if' condition ':' blockCode 'else:' blockCode ;
