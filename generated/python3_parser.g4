@@ -29,11 +29,9 @@ keyValuePair: string COLON (variableType | dict);
 
 operation: INTEGER_NUMBER+ arithmeticOperands INTEGER_NUMBER+ NEWLINE;
 
-// primitive : string | bool ;
 ifBlock:
 	IF condition COLON blockCode
 	| IF condition COLON blockCode ELSE blockCode;
-
 
 // NEWLINE : ('\r'? '\n' | '\r' | '\f') SPACES? ;
 
@@ -79,15 +77,6 @@ unary: unary(NOT|MINUS) unary
     | primary;
 primary: variableType | variableName | string | bool | nullvalue
     | LPAREN conditionalStatement RPAREN;
-
-//
-//COMMENT
-//    : '#' .*? -> skip
-//;
-
-
-// NUMBER: INTEGER (DOT INTEGER)?;
-
 
 // making var to handle case of multiple condition
 condition_handler: condition COMBINE condition_handler | condition;
