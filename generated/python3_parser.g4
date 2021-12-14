@@ -9,7 +9,7 @@ line
     | for_statement;
 
 blockCode
-    : print
+    : printF
     | while_statement
     | assignmentOperators
     | CTRL_FLOW
@@ -20,24 +20,24 @@ variableName: IDENTIFIER;
 variableType:
     number
 	| STRING
-	| bool
+	| boolValue
 	| nullvalue
 	| floatvalue
-	| set
-	| list
-	| dict;
+	| setValue
+	| listValue
+	| dictValue;
 number
     : INT
     | INTEGER_NUMBER
     | NON_ZERO_DIGIT
     | MINUS INTEGER_NUMBER;
-bool: BOOL;
+boolValue: BOOL;
 nullvalue: 'None';//TODO: what is this?
 floatvalue: NUMBER;
-set: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
-list: BRACKET variableType (DELIM variableType)* BRACKET | BRACKET BRACKET;
-dict: BRACKET ( keyValuePair (DELIM keyValuePair)*)? BRACKET;
-keyValuePair: STRING COLON (variableType | dict);
+setValue: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
+listValue: BRACKET variableType (DELIM variableType)* BRACKET | BRACKET BRACKET;
+dictValue: BRACKET ( keyValuePair (DELIM keyValuePair)*)? BRACKET;
+keyValuePair: STRING COLON (variableType | dictValue);
 
 //==================================================================================================
 // IF STATEMENTS
@@ -99,7 +99,7 @@ while_statement: LOOP condition COLON insideWhile;
 insideWhile: (INDENT (blockCode | oneDeepIf))+ endWhile*;
 endWhile: NEWLINE;
 
-print: PRINT LPAREN (STRING | cast | variableName) (PLUS STRING | PLUS cast | PLUS variableName)* RPAREN;
+printF: PRINT LPAREN (STRING | cast | variableName) (PLUS STRING | PLUS cast | PLUS variableName)* RPAREN;
 cast: CAST LPAREN (arithmeticOperation | variableName) RPAREN;
 
 arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
