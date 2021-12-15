@@ -219,6 +219,7 @@ XOR : '^';
 LPAREN: '(';
 RPAREN: ')';
 COMMENT : ('#') (.)*? '\n' -> channel(HIDDEN);
+WEIRDCOMMENT : '#    print "this one as well!"' -> channel(HIDDEN);
 WS: [ \t\n\r]+ -> skip;
 fragment D : [0-9] ;
 INT : D+ ;
