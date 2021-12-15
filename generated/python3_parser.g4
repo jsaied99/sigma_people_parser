@@ -1,22 +1,36 @@
 grammar python3_parser;
 //import test;
 
+//==================================================================================================
+// GENERIC CODE
+//==================================================================================================
+
+// root (entire code)
 program: line+;
 
+// a line of code (i.e each standalone chunk not necessarily a single line)
 line
     : blockCode
     | ifBlock
     | for_statement;
 
+// blocks of code that are context free (i.e. they can be nested without issues)
 blockCode
     : printF
     | while_statement
-    | assignmentOperators
+    | assignmentOperation
     | CTRL_FLOW
     | NEWLINE
     ;
 
+//==================================================================================================
+// VARIABLES
+//==================================================================================================
+
+// variable name
 variableName: IDENTIFIER;
+
+// types
 variableType:
     number
 	| STRING
@@ -26,14 +40,27 @@ variableType:
 	| setValue
 	| listValue
 	| dictValue;
+
+//what is a number
 number
     : INT
     | INTEGER_NUMBER
     | NON_ZERO_DIGIT
     | MINUS INTEGER_NUMBER;
+
+ //what is a bool
 boolValue: BOOL;
+
 nullvalue: 'None';//TODO: what is this?
+
+//floats
 floatvalue: NUMBER;
+
+//==================================================================================================
+// LISTS
+//==================================================================================================
+
+//sets lists and dicts
 setValue: LPAREN variableType (DELIM variableType)* RPAREN | LPAREN RPAREN;
 listValue: BRACKET variableType (DELIM variableType)* BRACKET | BRACKET BRACKET;
 dictValue: BRACKET ( keyValuePair (DELIM keyValuePair)*)? BRACKET;
@@ -99,14 +126,24 @@ while_statement: LOOP condition COLON insideWhile;
 insideWhile: (INDENT (blockCode | oneDeepIf))+ endWhile*;
 endWhile: NEWLINE;
 
+//==================================================================================================
+// PRINTING AND CASTING
+//==================================================================================================
+
 printF: PRINT LPAREN (STRING | cast | variableName) (PLUS STRING | PLUS cast | PLUS variableName)* RPAREN;
 cast: CAST LPAREN (arithmeticOperation | variableName) RPAREN;
 
-arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
+//==================================================================================================
+// MATH
+//==================================================================================================
 
-assignmentOperators: variableName (SET | assignmentPreOperand SET) assigned;
+// assignment
+assignmentOperation: variableName (SET | assignmentPreOperand SET) assigned;
 assignmentPreOperand: arithmeticOperands | PRESETOPERAND;
 assigned: variableType | arithmeticOperation;
+
+// Operators
+arithmeticOperands: PLUS | MINUS | DIVIDE | MULTIPLY | MOD | XOR;
 arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | floatvalue
     | number
@@ -115,8 +152,7 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
     | cast
     ;
 
-conditionalStatement: equality;
-equality: comparison((NOT_EQUAL|EQUAL) comparison)*;
+conditionalStatement: comparison((NOT_EQUAL|EQUAL) comparison)*;
 comparison: term((GREATER_THAN|EQUAL_GREATER|LESS_THAN|EQUAL_LESS) term)*;
 term: factor((MINUS|PLUS) factor)*;
 factor: unary((DIVIDE|MULTIPLY) unary)*;
