@@ -105,7 +105,7 @@ endThreeIf
 
 //Looping range
 forRange: variableName RANGE LPAREN startRange DELIM endRange RPAREN;
-startRange: (IDENTIFIER | NUMBER arithmeticOperation);
+startRange: (IDENTIFIER | NUMBER | arithmeticOperation);
 endRange: (IDENTIFIER | NUMBER | arithmeticOperation);
 //Non-nested for
 for_statement: LOOP forRange COLON insideFor;
@@ -154,7 +154,7 @@ arithmeticOperation: arithmeticOperation arithmeticOperands arithmeticOperation
 
 conditionalStatement: comparison((NOT_EQUAL|EQUAL) comparison)*;
 comparison: term((GREATER_THAN|EQUAL_GREATER|LESS_THAN|EQUAL_LESS) term)*;
-term: factor((MINUS|PLUS) factor)*;
+term: factor((MINUS|PLUS) factor)* | arithmeticOperation;
 factor: unary((DIVIDE|MULTIPLY) unary)*;
 unary: unary(NOT|MINUS) unary
     | primary;
