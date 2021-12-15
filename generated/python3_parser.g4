@@ -76,7 +76,14 @@ inside: (INDENT (blockCode | oneDeepIf))+ endIf*;
 endIf
     : NEWLINE ELSE COLON inside //ELSE
     | NEWLINE                   //END IF
-    | NEWLINE ifBlock;          //ELSE IF
+    | NEWLINE elifBlock;          //ELSE IF
+
+elifBlock: ELIF condition COLON elifInside;
+elifInside: (INDENT (blockCode | oneDeepIf))+ endElif*;
+endElif
+    : NEWLINE ELSE COLON inside //ELSE
+    | NEWLINE                   //END IF
+    | NEWLINE elifBlock;          //ELSE IF
 
 //Nested if (+else)
 oneDeepIf: IF condition COLON insideOneIf;
@@ -228,7 +235,8 @@ fragment INTEGER: DIGIT2+;
 fragment DOT : '.';
 NUMBER: INTEGER (DOT INTEGER)?;
 SET: '=';
-IF: 'if' | 'elif';
+IF: 'if';
+ELIF:'elif';
 ELSE: 'else';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 COLON: ':';
