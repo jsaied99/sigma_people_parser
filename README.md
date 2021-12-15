@@ -7,6 +7,7 @@ This project implements a parser for the Python language, using Context-free Gra
 - ANTLR 4.9.3 runtime for Python
 - Virtual environment
 - (Optional) IntelliJ for visualization of parse tree
+![Parse Tree](PyParseTree.PNG "Parse Tree")
 
 ### How to Run Parser:
 1. Clone repo `git clone https://github.com/jsaied99/sigma_people_parser.git`
@@ -16,3 +17,4 @@ This project implements a parser for the Python language, using Context-free Gra
 5. Run `python3 pythonParser.py python_testcode.py` to output parse tree for python_testcode.py
 
 ### Demo Video:
+https://youtu.be/HcWkY04jDjQ
