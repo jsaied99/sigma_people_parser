@@ -152,6 +152,33 @@ class python3_parserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by python3_parserParser#elifBlock.
+    def enterElifBlock(self, ctx:python3_parserParser.ElifBlockContext):
+        pass
+
+    # Exit a parse tree produced by python3_parserParser#elifBlock.
+    def exitElifBlock(self, ctx:python3_parserParser.ElifBlockContext):
+        pass
+
+
+    # Enter a parse tree produced by python3_parserParser#elifInside.
+    def enterElifInside(self, ctx:python3_parserParser.ElifInsideContext):
+        pass
+
+    # Exit a parse tree produced by python3_parserParser#elifInside.
+    def exitElifInside(self, ctx:python3_parserParser.ElifInsideContext):
+        pass
+
+
+    # Enter a parse tree produced by python3_parserParser#endElif.
+    def enterEndElif(self, ctx:python3_parserParser.EndElifContext):
+        pass
+
+    # Exit a parse tree produced by python3_parserParser#endElif.
+    def exitEndElif(self, ctx:python3_parserParser.EndElifContext):
+        pass
+
+
     # Enter a parse tree produced by python3_parserParser#oneDeepIf.
     def enterOneDeepIf(self, ctx:python3_parserParser.OneDeepIfContext):
         pass
@@ -359,21 +386,12 @@ class python3_parserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by python3_parserParser#arithmeticOperands.
-    def enterArithmeticOperands(self, ctx:python3_parserParser.ArithmeticOperandsContext):
+    # Enter a parse tree produced by python3_parserParser#assignmentOperation.
+    def enterAssignmentOperation(self, ctx:python3_parserParser.AssignmentOperationContext):
         pass
 
-    # Exit a parse tree produced by python3_parserParser#arithmeticOperands.
-    def exitArithmeticOperands(self, ctx:python3_parserParser.ArithmeticOperandsContext):
-        pass
-
-
-    # Enter a parse tree produced by python3_parserParser#assignmentOperators.
-    def enterAssignmentOperators(self, ctx:python3_parserParser.AssignmentOperatorsContext):
-        pass
-
-    # Exit a parse tree produced by python3_parserParser#assignmentOperators.
-    def exitAssignmentOperators(self, ctx:python3_parserParser.AssignmentOperatorsContext):
+    # Exit a parse tree produced by python3_parserParser#assignmentOperation.
+    def exitAssignmentOperation(self, ctx:python3_parserParser.AssignmentOperationContext):
         pass
 
 
@@ -395,6 +413,15 @@ class python3_parserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by python3_parserParser#arithmeticOperands.
+    def enterArithmeticOperands(self, ctx:python3_parserParser.ArithmeticOperandsContext):
+        pass
+
+    # Exit a parse tree produced by python3_parserParser#arithmeticOperands.
+    def exitArithmeticOperands(self, ctx:python3_parserParser.ArithmeticOperandsContext):
+        pass
+
+
     # Enter a parse tree produced by python3_parserParser#arithmeticOperation.
     def enterArithmeticOperation(self, ctx:python3_parserParser.ArithmeticOperationContext):
         pass
@@ -410,15 +437,6 @@ class python3_parserListener(ParseTreeListener):
 
     # Exit a parse tree produced by python3_parserParser#conditionalStatement.
     def exitConditionalStatement(self, ctx:python3_parserParser.ConditionalStatementContext):
-        pass
-
-
-    # Enter a parse tree produced by python3_parserParser#equality.
-    def enterEquality(self, ctx:python3_parserParser.EqualityContext):
-        pass
-
-    # Exit a parse tree produced by python3_parserParser#equality.
-    def exitEquality(self, ctx:python3_parserParser.EqualityContext):
         pass
 
 
